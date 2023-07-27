@@ -5,13 +5,13 @@ on:
       - staging
     paths:
     - '0.9.5/**'
-    - '.github/workflows/0-cicd-0.9.5.yaml'
+    - '.github/workflows/0-cicd-0.9.5-staging.yaml'
   pull_request:
     branches:
       - "staging"
     paths:
     - '0.9.5/**'
-    - '.github/workflows/0-cicd-0.9.5.yaml'
+    - '.github/workflows/0-cicd-0.9.5-staging.yaml'
 #test
 jobs:
   call-ci-workflow-staging:

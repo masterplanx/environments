@@ -5,13 +5,13 @@ on:
       - main
     paths:
     - '0.9.5/**'
-    - '.github/workflows/0-cicd-0.9.5.yaml'
+    - '.github/workflows/0-cicd-0.9.5-prod.yaml'
   pull_request:
     branches:
       - "main"
     paths:
     - '0.9.5/**'
-    - '.github/workflows/0-cicd-0.9.5.yaml'
+    - '.github/workflows/0-cicd-0.9.5-prod.yaml'
 
 jobs:
   call-ci-workflow-prod:

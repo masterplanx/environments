@@ -5,20 +5,20 @@ on:
       - main
     paths:
     - '0.9.12/**'
-    - '.github/workflows/0-cicd-0.9.12.yaml'
+    - '.github/workflows/0-cicd-0.9.12-prod.yaml'
   pull_request:
     branches:
       - "main"
     paths:
     - '0.9.12/**'
-    - '.github/workflows/0-cicd-0.9.12.yaml'
+    - '.github/workflows/0-cicd-0.9.12-prod.yaml'
 
 jobs:
   call-ci-workflow-prod:
     uses: ./.github/workflows/1-build-image-prod.yaml
     secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_STAGING }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_STAGING }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD}}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
     with:      
       ECR_REPOSITORY: batuta-prod-us-east-1-ecr-backend
       AWS_REGION: us-east-1
