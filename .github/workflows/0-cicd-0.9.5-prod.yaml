@@ -1,0 +1,26 @@
+name: PROD Batuta Backend CICD - Build Push Docker Deploy ArgoCD - Rport 0.9.5 
+on:
+  push:
+    branches:
+      - main
+    paths:
+    - '0.9.5/**'
+    - '.github/workflows/0-cicd-0.9.5.yaml'
+  pull_request:
+    branches:
+      - "main"
+    paths:
+    - '0.9.5/**'
+    - '.github/workflows/0-cicd-0.9.5.yaml'
+
+jobs:
+  call-ci-workflow-prod:
+    uses: ./.github/workflows/1-build-image-prod.yaml
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_STAGING }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_STAGING }}
+    with:      
+      ECR_REPOSITORY: batuta-prod-us-east-1-ecr-backend
+      AWS_REGION: us-east-1
+      RPORT_VERSION: 0.9.5
+      

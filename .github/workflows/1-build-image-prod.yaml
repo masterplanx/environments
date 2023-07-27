@@ -1,0 +1,58 @@
+name: Build Image and Push to ECR 
+on:
+  workflow_call:
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+    inputs:
+      ECR_REPOSITORY:
+        required: true
+        type: string
+      AWS_REGION:
+        required: true
+        type: string
+      RPORT_VERSION:
+        required: true
+        type: string
+    outputs:
+      tag:
+        description: "Tag of the new built docker image"
+        value: ${{ jobs.build.outputs.tag }}
+
+jobs:
+  build:
+    name: Build Image and Push to ECR
+    env:
+      DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
+      ECR_REPOSITORY: ${{ inputs.ECR_REPOSITORY }}
+      IMAGE_TAG: ${{ github.sha }}
+      DOCKER_BUILDKIT: 1
+    runs-on: ubuntu-22.04
+    outputs:
+      tag: ${{ steps.set_github_run_number.outputs.outtag }}
+    steps:
+      - name: Checkout Git Code
+        uses: actions/checkout@v3
+
+      - name: Get branch names
+        id: get-branch-name
+        run: | 
+            echo "ref: " ${GITHUB_REF##*/}
+            echo "head_ref: " ${GITHUB_HEAD_REF##*/}
+            echo "base_ref: " ${GITHUB_BASE_REF##*/}
+            echo "--------"
+            echo "ref: " ${GITHUB_REF}
+            echo "head_ref: " ${GITHUB_HEAD_REF}
+            echo "base_ref: " ${GITHUB_BASE_REF}
+            echo "variables env ----"
+            echo "ref: " ${{ env.REF }}
+            echo "head_ref:" ${{ env.HEAD_REF }}
+            echo "base_ref:" ${{ env.BASE_REF }}
+  
+      - name: Sleep
+        id: sleep
+        run: | 
+            echo "sleep"
+            sleep 300
