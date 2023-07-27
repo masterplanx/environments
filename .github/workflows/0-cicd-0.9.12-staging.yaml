@@ -1,0 +1,39 @@
+name: STAGING Batuta Backend CICD - Build Push Docker Deploy ArgoCD - Rport 0.9.12 
+on:
+  push:
+    branches:
+      - staging
+    paths:
+    - '0.9.12/**'
+    - '.github/workflows/0-cicd-0.9.12.yaml'
+  pull_request:
+    branches:
+      - "staging"
+    paths:
+    - '0.9.12/**'
+    - '.github/workflows/0-cicd-0.9.12.yaml'
+
+jobs:
+  call-ci-workflow-staging:
+    uses: ./.github/workflows/1-build-image-staging.yaml
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_STAGING }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_STAGING }}
+    with:      
+      ECR_REPOSITORY: batuta-staging-us-east-1-ecr-backend
+      AWS_REGION: us-east-1
+      RPORT_VERSION: 0.9.12
+      
+  tag-docker-image-staging:
+    if: github.ref == 'refs/heads/staging'
+    uses: ./.github/workflows/2-cd-update-tag-staging.yaml
+    needs: call-ci-workflow-staging
+    with:
+      environment: "staging"
+      service: batuta-backend
+      tag: ${{needs.call-ci-workflow-staging.outputs.tag}}
+      values-path: application/staging/clients
+      tag-path: "image.tag"
+    secrets:
+      token: ${{ secrets.GH_TOKEN }}
+      
