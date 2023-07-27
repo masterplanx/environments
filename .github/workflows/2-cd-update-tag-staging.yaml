@@ -1,0 +1,51 @@
+name: Update Tags
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+        description: "Environment that will be updated with new image tag"
+      service:
+        required: true
+        type: string
+        description: "Service that will be updated with new image tag"
+      tag:
+        required: true
+        type: string
+        description: "Image tag"
+      values-path:
+        required: true
+        type: string
+      tag-path:
+        required: false
+        type: string
+        default: "image.tag"
+      repository:
+        required: false
+        type: string
+        default: "Humanapis/batuta-deployments"
+    secrets:
+      token:
+        description: 'A token passed from the caller workflow'
+        required: false
+
+jobs:
+  promote-to-env:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+    - name: Update Tags
+      run: | 
+            echo "ref: " ${GITHUB_REF##*/}
+            echo "head_ref: " ${GITHUB_HEAD_REF##*/}
+            echo "base_ref: " ${GITHUB_BASE_REF##*/}
+            echo "--------"
+            echo "ref: " ${GITHUB_REF}
+            echo "head_ref: " ${GITHUB_HEAD_REF}
+            echo "base_ref: " ${GITHUB_BASE_REF}
+            echo "variables env ----"
+            echo "ref: " ${{ env.REF }}
+            echo "head_ref:" ${{ env.HEAD_REF }}
+            echo "base_ref:" ${{ env.BASE_REF }}
+        
