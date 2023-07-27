@@ -1,0 +1,34 @@
+name: STAGING test
+on:
+  push:
+    branches:
+      - staging
+    paths:
+    - '0.9.5/**'
+    - '.github/workflows/0-cicd-0.9.5.yaml'
+  pull_request:
+    branches:
+      - "staging"
+    paths:
+    - '0.9.5/**'
+    - '.github/workflows/0-cicd-0.9.5.yaml'
+
+jobs:
+  promote-to-env:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+    - name: Update Tags
+      run: | 
+            echo "ref: " ${GITHUB_REF##*/}
+            echo "head_ref: " ${GITHUB_HEAD_REF##*/}
+            echo "base_ref: " ${GITHUB_BASE_REF##*/}
+            echo "--------"
+            echo "ref: " ${GITHUB_REF}
+            echo "head_ref: " ${GITHUB_HEAD_REF}
+            echo "base_ref: " ${GITHUB_BASE_REF}
+            echo "variables env ----"
+            echo "ref: " ${{ env.REF }}
+            echo "head_ref:" ${{ env.HEAD_REF }}
+            echo "base_ref:" ${{ env.BASE_REF }}
+
